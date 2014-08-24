@@ -126,6 +126,11 @@ class Level extends flixel.addons.editors.tiled.TiledMap {
 				state.door = door;
 				state.add(door);
 
+			case "wall":
+				var tileset = g.map.getGidOwner(o.gid);
+				var wall = new Wall(x, y, c_PATH_LEVEL_TILESHEETS + tileset.imageSource);
+				state.walls.add(wall);
+
 			case "floor":
 				var floor = new FlxObject(x, y, o.width, o.height);
 				state.floor = floor;

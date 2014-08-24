@@ -100,15 +100,15 @@ class Enemy extends FlxSprite {
 		FlxTween.tween(this, { alpha:0, y:y - 16 }, .66, {ease:FlxEase.circOut, complete:finishKill } );
 	}
 
+	private function finishKill(_):Void
+	{
+		exists = false;
+	}
+
 	public function getBulletSpawnPosition():FlxPoint
 	{
 		var p: FlxPoint = new FlxPoint(x + 36, y + 12);
 		return p;
-	}
-
-	private function finishKill(_):Void
-	{
-		exists = false;
 	}
 
 	private function fire():Void {

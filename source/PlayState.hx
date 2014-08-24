@@ -33,6 +33,9 @@ class PlayState extends FlxState
 	public var coinSound:FlxSound;
 	public var lastLvl:String = "level2";
   	public var gameSound:FlxSound;
+  	public var ax:Ax;
+  	public var walls:FlxTypedGroup<Wall>;
+  	public var axOpen:Bool = false;
 
 	public function new (lvl:String = "level") {
 		this.lvl = lvl;
@@ -62,6 +65,9 @@ class PlayState extends FlxState
 
 		bullets = new FlxTypedGroup<Bullet>();
 		add(bullets);
+
+		walls = new FlxTypedGroup<Wall>();
+		add(walls);
 
 		coins = new FlxGroup();
 		add(coins);
@@ -122,6 +128,13 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+		if (FlxG.keys.pressed.X && !axOpen) {
+			var p = player.getBulletSpawnPosition();
+			ax = new Ax(p.x, p.y);
+			axOpen = true;
+			add(ax);
+		}
+
 		if (gameSound != null && !gameSound.active) {
 			gameSound.play();
 		}
@@ -143,12 +156,13 @@ class PlayState extends FlxState
 		super.update();
 
 		for (b in bullets.members) {
-			if (level.collideWithLevel(b)) {
+			if (/*wallCollide(b) || */level.collideWithLevel(b)) {
 				b.kill();
 			}
 		}
 
 		for (e in enemys.members) {
+			// wallCollide(e);
 			level.collideWithLevel(e);
 		}
 
@@ -162,7 +176,7 @@ class PlayState extends FlxState
 		FlxG.overlap(bullets, enemys, killEnemy);
 
 		// Kill player
-		FlxG.overlap(enemys, player, killPlayer);
+		// FlxG.overlap(enemys, player, killPlayer);
 
 		// Bullets can kill coins.. that's bad :)
 		FlxG.overlap(bullets, coins, killCoins);
@@ -173,6 +187,31 @@ class PlayState extends FlxState
 		{
 			the_end(true);
 		}
+
+		if (ax != null && axOpen) {
+			FlxG.overlap(ax, walls, axem);
+			FlxG.overlap(ax, enemys, axemey);
+			var timer = new haxe.Timer(100);
+			timer.run = function () {
+				if (ax != null) {
+					ax.kill();
+					axOpen = false;
+				}
+			}
+		}
+	}
+
+	public function axemey (a: Ax, e:Enemy): Void {
+		e.kill();
+		killedText.text = 'KILLED: ' + enemys.countDead();
+		a.kill();
+		axOpen = false;
+	}
+
+	public function axem (a:Ax, w:Wall): Void {
+		w.kill();
+		a.kill();
+		axOpen = false;
 	}
 
 	public function killCoins (b:Bullet, c:FlxObject): Void {
@@ -200,11 +239,5 @@ class PlayState extends FlxState
 		coinSound.play();
 		c.kill();
 		score.text = 'SCORE: ' + (coins.countDead() * 10);
-		
-		/*if (coins.countLiving() == 0)
-		{
-			status.text = "Find the exit";
-			exit.exists = true;
-		}*/
 	}
 }

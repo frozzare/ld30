@@ -23,6 +23,8 @@ class MenuState extends FlxState {
   override public function create():Void
   {
 
+    FlxG.switchState(new PlayState("level"));
+
     bgColor = 0xff43993e;
 
     var text = new FlxText(0, (FlxG.height/2) - 40, 100, "Alf the game");
