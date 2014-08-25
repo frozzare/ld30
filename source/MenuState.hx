@@ -23,7 +23,7 @@ class MenuState extends FlxState {
   override public function create():Void
   {
 
-    FlxG.switchState(new PlayState("level"));
+    //FlxG.switchState(new PlayState("level"));
 
     bgColor = 0xff43993e;
 
