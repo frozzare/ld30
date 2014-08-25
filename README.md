@@ -6,13 +6,17 @@ Tested with Haxe 3.1.3
 
 # Install
 
+```
   haxelib install flixel
   haxelib install flixel-addons
   haxelib install lime
   haxelib run lime setup
+```
 
 # Running
 
+```
   lime test neko
+```
 
 ![](screenshots/game2.png)
