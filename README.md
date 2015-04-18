@@ -1,6 +1,6 @@
 # Alf the game
 
-This is the game i created during ld30. This is my first Haxe project so the code isn't so good. But the game works!
+This is the game I created during ld30. This is my first Haxe project so the code isn't so good. But the game works!
 
 Tested with Haxe 3.1.3
 
